@@ -7,7 +7,7 @@ local M = {}
 local function create_colors()
 	local c = {
 		dark = {
-			bg = hsl("#6D675E"), -- Dark background
+			bg = hsl("#F2F0EA"):rotate(180), -- Dark background
 			bg_alt = hsl(220, 13, 22), -- Slightly lighter background
 			fg = hsl(220, 14, 71), -- Light foreground
 			fg_alt = hsl(220, 14, 60), -- Slightly darker foreground
@@ -17,10 +17,11 @@ local function create_colors()
 			blue = hsl(207, 82, 66), -- Bright blue
 			purple = hsl(286, 60, 67), -- Soft purple
 			cyan = hsl(187, 47, 55), -- Muted cyan
+			c1 = hsl("#737165"),
 		},
 		light = {
 			bg = hsl("#F2F0EA"),
-			fg = hsl("#A9A69C"),
+			fg = hsl("#7B6C51"),
 			red = hsl("#8D4144"),
 			green = hsl("#8CA375"),
 			yellow = hsl("#CC7C5E"),
@@ -28,7 +29,7 @@ local function create_colors()
 			purple = hsl("#41386E"),
 			cyan = hsl("#6d675d"),
 			c1 = hsl("#737165"),
-			black = hsl("#7B6C51"),
+			c2 = hsl("#A9A69C"),
 		},
 	}
 
@@ -93,7 +94,7 @@ local function setup_colors()
 	hlg("SpecialComment"):as("Special")
 	hlg("Debug"):as("Special")
 
-	hlg("Underlined"):underline()
+	hlg("Underlined"):undercurl()
 	hlg("Ignore"):fg(theme.fg_alt)
 	hlg("Error"):fg(theme.red):bold()
 	hlg("Todo"):fg(theme.purple):bold()
@@ -117,7 +118,7 @@ local function setup_colors()
 	hlg("FoldColumn"):as("Folded")
 
 	hlg("SignColumn"):fg(theme.fg):bg(theme.bg)
-	hlg("LineNr"):fg(theme.fg_alt)
+	hlg("LineNr"):fg(theme.c2)
 	hlg("CursorLineNr"):fg(theme.yellow):bold()
 
 	hlg("MatchParen"):fg(theme.yellow):bold():underline()
@@ -149,7 +150,73 @@ local function setup_colors()
 	hlg("GitSignsDelete"):fg(theme.red)
 
 	--TreeSitter
-	hlg("@variable"):fg(theme.black):italic()
+
+	-- Additional highlight groups
+	hlg("NvimInternalError"):fg(theme.red):bold()
+	hlg("NvimInvalidSpacing"):bg(theme.red:lighter(20))
+	hlg("NvimInvalidIndent"):bg(theme.yellow:lighter(20))
+	hlg("NvimInvalidTabStop"):bg(theme.purple:lighter(20))
+
+	-- Spelling
+	hlg("SpellBad"):fg(theme.red):underline()
+	hlg("SpellCap"):fg(theme.yellow):underline()
+	hlg("SpellRare"):fg(theme.purple):underline()
+	hlg("SpellLocal"):fg(theme.cyan):underline()
+
+	-- Treesitter
+	hlg("@string"):fg(theme.green)
+	hlg("@function"):fg(theme.yellow)
+	hlg("@function.call"):fg(theme.yellow)
+	hlg("@method"):fg(theme.blue)
+	hlg("@constructor"):fg(theme.purple)
+	hlg("@parameter"):fg(theme.cyan):italic()
+	hlg("@type"):fg(theme.yellow)
+	hlg("@property"):fg(theme.cyan)
+	hlg("@variable"):fg(theme.fg):italic()
+
+	-- Diagnostic
+	hlg("DiagnosticError"):fg(theme.red:lighter(10)):italic()
+	hlg("DiagnosticWarn"):fg(theme.yellow:saturate(10)):italic()
+	hlg("DiagnosticInfo"):fg(theme.blue):italic()
+	hlg("DiagnosticHint"):fg(theme.cyan):italic()
+	hlg("DiagnosticUnderlineError"):undercurl():sp(theme.red)
+	hlg("DiagnosticUnderlineWarn"):undercurl():sp(theme.yellow)
+	hlg("DiagnosticUnderlineInfo"):undercurl():sp(theme.blue)
+	hlg("DiagnosticUnderlineHint"):undercurl():sp(theme.cyan)
+
+	-- Neovim LSP
+	hlg("LspReferenceText"):bg(theme.bg_alt)
+	hlg("LspReferenceRead"):bg(theme.bg_alt)
+	hlg("LspReferenceWrite"):bg(theme.bg_alt)
+	hlg("LspSignatureActiveParameter"):fg(theme.yellow):bold()
+
+	-- Lualine
+	hlg("LualineNormal"):fg(theme.fg):bg(theme.bg_alt)
+	hlg("LualineInsert"):fg(theme.bg):bg(theme.green)
+	hlg("LualineVisual"):fg(theme.bg):bg(theme.purple)
+	hlg("LualineReplace"):fg(theme.bg):bg(theme.red)
+	hlg("LualineCommand"):fg(theme.bg):bg(theme.yellow)
+
+	-- Nvim-Tree
+	hlg("NvimTreeNormal"):fg(theme.fg):bg(theme.bg)
+	hlg("NvimTreeFolderName"):fg(theme.blue)
+	hlg("NvimTreeFolderIcon"):fg(theme.yellow)
+	hlg("NvimTreeOpenedFolderName"):fg(theme.blue):bold()
+	hlg("NvimTreeEmptyFolderName"):fg(theme.fg_alt)
+	hlg("NvimTreeIndentMarker"):fg(theme.fg_alt)
+	hlg("NvimTreeSymlink"):fg(theme.cyan)
+	hlg("NvimTreeStatuslineNc"):fg(theme.fg_alt):bg(theme.bg)
+
+	-- Spelling with wavy underlines
+	hlg("SpellBad"):undercurl():sp(theme.red)
+	hlg("SpellCap"):undercurl():sp(theme.yellow)
+	hlg("SpellRare"):undercurl():sp(theme.purple)
+	hlg("SpellLocal"):undercurl():sp(theme.cyan)
+
+	-- NvimInvalid* groups with wavy underlines
+	hlg("NvimInvalidSpacing"):undercurl():sp(theme.red)
+	hlg("NvimInvalidIndent"):undercurl():sp(theme.yellow)
+	hlg("NvimInvalidTabStop"):undercurl():sp(theme.purple)
 end
 
 -- Function to load the colorscheme
