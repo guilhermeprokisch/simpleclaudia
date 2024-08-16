@@ -12,21 +12,23 @@ local function create_colors()
 			fg = hsl(220, 14, 71), -- Light foreground
 			fg_alt = hsl(220, 14, 60), -- Slightly darker foreground
 			red = hsl(355, 65, 65), -- Soft red
-			green = hsl(95, 55, 55), -- Muted green
+			green = hsl("#6D675D"), -- Muted green
 			yellow = hsl(40, 70, 68), -- Warm yellow
 			blue = hsl(207, 82, 66), -- Bright blue
 			purple = hsl(286, 60, 67), -- Soft purple
 			cyan = hsl(187, 47, 55), -- Muted cyan
 		},
 		light = {
-			bg = hsl("#F3F1E9"), -- Light background
-			fg = hsl("#A9A69C"), -- Dark foreground
-			red = hsl("#B1856C"):saturate(0), -- Darker red for contrast
-			green = hsl("#8C9484"):saturate(20), -- Darker green for contrast
-			yellow = hsl("#D67654"):saturate(20), -- Darker yellow for contrast
-			blue = hsl("#556A7B"):saturate(50), -- Darker blue for contrast
-			purple = hsl("#7E788E"):saturate(15), -- Darker purple for contrast
-			cyan = hsl("#6d675d"):saturate(20), -- Darker cyan for contrast
+			bg = hsl("#F2F0EA"),
+			fg = hsl("#A9A69C"),
+			red = hsl("#8D4144"),
+			green = hsl("#8CA375"),
+			yellow = hsl("#CC7C5E"),
+			blue = hsl("#3F7DD7"),
+			purple = hsl("#41386E"),
+			cyan = hsl("#6d675d"),
+			c1 = hsl("#737165"),
+			black = hsl("#7B6C51"),
 		},
 	}
 
@@ -48,28 +50,29 @@ local function setup_colors()
 	-- Basic editor colors
 	hlg("Normal"):bg(theme.bg):fg(theme.fg)
 	hlg("NormalFloat"):as("Normal")
-	hlg("Comment"):fg(theme.green):italic()
+	-- hlg("Comment"):fg(theme.green:mix(theme.bg):desaturate(10):darker(10)):italic()
+	hlg("Comment"):fg(theme.c1:lighter(20)):italic()
 	hlg("Cursor"):fg(theme.bg):bg(theme.fg)
 	hlg("CursorLine"):bg(theme.bg_alt)
 	hlg("CursorColumn"):as("CursorLine")
 
 	-- Syntax highlighting
-	hlg("Constant"):fg(theme.cyan)
+	hlg("Constant"):fg(theme.cyan):italic()
 	hlg("String"):fg(theme.green)
 	hlg("Character"):as("String")
-	hlg("Number"):fg(theme.purple)
+	hlg("Number"):fg(theme.purple):italic()
 	hlg("Boolean"):as("Number")
 	hlg("Float"):as("Number")
 
 	hlg("Identifier"):fg(theme.blue)
 	hlg("Function"):fg(theme.yellow)
 
-	hlg("Statement"):fg(theme.purple):bold()
+	hlg("Statement"):fg(theme.blue):bold()
 	hlg("Conditional"):as("Statement")
 	hlg("Repeat"):as("Statement")
 	hlg("Label"):as("Statement")
 	hlg("Operator"):fg(theme.cyan)
-	hlg("Keyword"):as("Statement")
+	hlg("Keyword"):fg(theme.blue)
 	hlg("Exception"):as("Statement")
 
 	hlg("PreProc"):fg(theme.cyan)
@@ -83,7 +86,7 @@ local function setup_colors()
 	hlg("Structure"):as("Type")
 	hlg("Typedef"):as("Type")
 
-	hlg("Special"):fg(theme.red)
+	hlg("Special"):fg(theme.green)
 	hlg("SpecialChar"):as("Special")
 	hlg("Tag"):as("Special")
 	hlg("Delimiter"):as("Special")
@@ -129,7 +132,7 @@ local function setup_colors()
 	hlg("Title"):fg(theme.purple):bold()
 
 	-- Diagnostic
-	hlg("ErrorMsg"):fg(theme.red):bold()
+	hlg("ErrorMsg"):fg(theme.red):italic()
 	hlg("WarningMsg"):fg(theme.yellow):bold()
 	hlg("MoreMsg"):fg(theme.blue):bold()
 	hlg("Question"):fg(theme.purple):bold()
@@ -144,6 +147,9 @@ local function setup_colors()
 	hlg("GitSignsAdd"):fg(theme.green)
 	hlg("GitSignsChange"):fg(theme.yellow)
 	hlg("GitSignsDelete"):fg(theme.red)
+
+	--TreeSitter
+	hlg("@variable"):fg(theme.black):italic()
 end
 
 -- Function to load the colorscheme
