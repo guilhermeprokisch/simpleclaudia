@@ -1,11 +1,11 @@
 local utils = require("simpleclaudia.utils")
-local hl, hsl = utils.hl, utils.hsl
+local hlg, hsl = utils.hlg, utils.hsl
 
 local M = {}
 
 -- Function to create the color palettes
 local function create_colors()
-	local colors = {
+	local c = {
 		dark = {
 			bg = hsl("#6D675E"), -- Dark background
 			bg_alt = hsl(220, 13, 22), -- Slightly lighter background
@@ -21,22 +21,19 @@ local function create_colors()
 		light = {
 			bg = hsl("#F3F1E9"), -- Light background
 			fg = hsl("#A9A69C"), -- Dark foreground
-			red = hsl("#B1856C"), -- Darker red for contrast
-			green = hsl("#8C9484"), -- Darker green for contrast
-			yellow = hsl("#D67654"), -- Darker yellow for contrast
-			blue = hsl("#556A7B"), -- Darker blue for contrast
-			purple = hsl("#7E788E"), -- Darker purple for contrast
-			cyan = hsl("#6d675d"), -- Darker cyan for contrast
+			red = hsl("#B1856C"):saturate(0), -- Darker red for contrast
+			green = hsl("#8C9484"):saturate(20), -- Darker green for contrast
+			yellow = hsl("#D67654"):saturate(20), -- Darker yellow for contrast
+			blue = hsl("#556A7B"):saturate(50), -- Darker blue for contrast
+			purple = hsl("#7E788E"):saturate(15), -- Darker purple for contrast
+			cyan = hsl("#6d675d"):saturate(20), -- Darker cyan for contrast
 		},
 	}
 
 	-- Define additional keys based on existing ones
-	colors.light.bg_alt = colors.light.bg:desaturate(30)
-	colors.light.fg_alt = colors.light.fg:lighter(2)
-
-	-- colors.light.contrast = colors.light.bg:darken_by(10) -- Example of creating a derived value
-
-	return colors
+	c.light.bg_alt = c.light.bg:desaturate(30)
+	c.light.fg_alt = c.light.fg:lighter(2)
+	return c
 end
 
 -- Initialize the colors
@@ -49,104 +46,104 @@ local function setup_colors()
 	-- hl("NormalFloat"):as("Normal"):darker(10, "bg") -- FIX: Modifiers no working
 
 	-- Basic editor colors
-	hl("Normal"):bg(theme.bg):fg(theme.fg)
-	hl("NormalFloat"):as("Normal")
-	hl("Comment"):fg(theme.green):italic()
-	hl("Cursor"):fg(theme.bg):bg(theme.fg)
-	hl("CursorLine"):bg(theme.bg_alt)
-	hl("CursorColumn"):as("CursorLine")
+	hlg("Normal"):bg(theme.bg):fg(theme.fg)
+	hlg("NormalFloat"):as("Normal")
+	hlg("Comment"):fg(theme.green):italic()
+	hlg("Cursor"):fg(theme.bg):bg(theme.fg)
+	hlg("CursorLine"):bg(theme.bg_alt)
+	hlg("CursorColumn"):as("CursorLine")
 
 	-- Syntax highlighting
-	hl("Constant"):fg(theme.cyan)
-	hl("String"):fg(theme.green)
-	hl("Character"):as("String")
-	hl("Number"):fg(theme.purple)
-	hl("Boolean"):as("Number")
-	hl("Float"):as("Number")
+	hlg("Constant"):fg(theme.cyan)
+	hlg("String"):fg(theme.green)
+	hlg("Character"):as("String")
+	hlg("Number"):fg(theme.purple)
+	hlg("Boolean"):as("Number")
+	hlg("Float"):as("Number")
 
-	hl("Identifier"):fg(theme.blue)
-	hl("Function"):fg(theme.yellow)
+	hlg("Identifier"):fg(theme.blue)
+	hlg("Function"):fg(theme.yellow)
 
-	hl("Statement"):fg(theme.purple):bold()
-	hl("Conditional"):as("Statement")
-	hl("Repeat"):as("Statement")
-	hl("Label"):as("Statement")
-	hl("Operator"):fg(theme.cyan)
-	hl("Keyword"):as("Statement")
-	hl("Exception"):as("Statement")
+	hlg("Statement"):fg(theme.purple):bold()
+	hlg("Conditional"):as("Statement")
+	hlg("Repeat"):as("Statement")
+	hlg("Label"):as("Statement")
+	hlg("Operator"):fg(theme.cyan)
+	hlg("Keyword"):as("Statement")
+	hlg("Exception"):as("Statement")
 
-	hl("PreProc"):fg(theme.cyan)
-	hl("Include"):as("PreProc")
-	hl("Define"):as("PreProc")
-	hl("Macro"):as("PreProc")
-	hl("PreCondit"):as("PreProc")
+	hlg("PreProc"):fg(theme.cyan)
+	hlg("Include"):as("PreProc")
+	hlg("Define"):as("PreProc")
+	hlg("Macro"):as("PreProc")
+	hlg("PreCondit"):as("PreProc")
 
-	hl("Type"):fg(theme.yellow)
-	hl("StorageClass"):as("Type")
-	hl("Structure"):as("Type")
-	hl("Typedef"):as("Type")
+	hlg("Type"):fg(theme.yellow)
+	hlg("StorageClass"):as("Type")
+	hlg("Structure"):as("Type")
+	hlg("Typedef"):as("Type")
 
-	hl("Special"):fg(theme.red)
-	hl("SpecialChar"):as("Special")
-	hl("Tag"):as("Special")
-	hl("Delimiter"):as("Special")
-	hl("SpecialComment"):as("Special")
-	hl("Debug"):as("Special")
+	hlg("Special"):fg(theme.red)
+	hlg("SpecialChar"):as("Special")
+	hlg("Tag"):as("Special")
+	hlg("Delimiter"):as("Special")
+	hlg("SpecialComment"):as("Special")
+	hlg("Debug"):as("Special")
 
-	hl("Underlined"):underline()
-	hl("Ignore"):fg(theme.fg_alt)
-	hl("Error"):fg(theme.red):bold()
-	hl("Todo"):fg(theme.purple):bold()
+	hlg("Underlined"):underline()
+	hlg("Ignore"):fg(theme.fg_alt)
+	hlg("Error"):fg(theme.red):bold()
+	hlg("Todo"):fg(theme.purple):bold()
 
 	-- Editor UI
-	hl("StatusLine"):fg(theme.fg):bg(theme.bg_alt)
-	hl("StatusLineNC"):fg(theme.fg_alt):bg(theme.bg)
-	hl("TabLine"):as("StatusLineNC")
-	hl("TabLineFill"):as("StatusLine")
-	hl("TabLineSel"):fg(theme.bg):bg(theme.purple)
+	hlg("StatusLine"):fg(theme.fg):bg(theme.bg_alt)
+	hlg("StatusLineNC"):fg(theme.fg_alt):bg(theme.bg)
+	hlg("TabLine"):as("StatusLineNC")
+	hlg("TabLineFill"):as("StatusLine")
+	hlg("TabLineSel"):fg(theme.bg):bg(theme.purple)
 
-	hl("Search"):fg(theme.bg):bg(theme.yellow)
-	hl("IncSearch"):as("Search")
+	hlg("Search"):fg(theme.bg):bg(theme.yellow)
+	hlg("IncSearch"):as("Search")
 
-	hl("Pmenu"):fg(theme.fg):bg(theme.bg_alt)
-	hl("PmenuSel"):fg(theme.bg):bg(theme.purple)
-	hl("PmenuSbar"):bg(theme.bg_alt)
-	hl("PmenuThumb"):bg(theme.fg)
+	hlg("Pmenu"):fg(theme.fg):bg(theme.bg_alt)
+	hlg("PmenuSel"):fg(theme.bg):bg(theme.purple)
+	hlg("PmenuSbar"):bg(theme.bg_alt)
+	hlg("PmenuThumb"):bg(theme.fg)
 
-	hl("Folded"):fg(theme.fg_alt):bg(theme.bg_alt)
-	hl("FoldColumn"):as("Folded")
+	hlg("Folded"):fg(theme.fg_alt):bg(theme.bg_alt)
+	hlg("FoldColumn"):as("Folded")
 
-	hl("SignColumn"):fg(theme.fg):bg(theme.bg)
-	hl("LineNr"):fg(theme.fg_alt)
-	hl("CursorLineNr"):fg(theme.yellow):bold()
+	hlg("SignColumn"):fg(theme.fg):bg(theme.bg)
+	hlg("LineNr"):fg(theme.fg_alt)
+	hlg("CursorLineNr"):fg(theme.yellow):bold()
 
-	hl("MatchParen"):fg(theme.yellow):bold():underline()
+	hlg("MatchParen"):fg(theme.yellow):bold():underline()
 
-	hl("NonText"):fg(theme.fg_alt)
-	hl("SpecialKey"):as("NonText")
+	hlg("NonText"):fg(theme.fg_alt)
+	hlg("SpecialKey"):as("NonText")
 
-	hl("Visual"):bg(theme.bg_alt)
-	hl("VisualNOS"):as("Visual")
+	hlg("Visual"):bg(theme.bg_alt)
+	hlg("VisualNOS"):as("Visual")
 
-	hl("Directory"):fg(theme.blue)
-	hl("Title"):fg(theme.purple):bold()
+	hlg("Directory"):fg(theme.blue)
+	hlg("Title"):fg(theme.purple):bold()
 
 	-- Diagnostic
-	hl("ErrorMsg"):fg(theme.red):bold()
-	hl("WarningMsg"):fg(theme.yellow):bold()
-	hl("MoreMsg"):fg(theme.blue):bold()
-	hl("Question"):fg(theme.purple):bold()
+	hlg("ErrorMsg"):fg(theme.red):bold()
+	hlg("WarningMsg"):fg(theme.yellow):bold()
+	hlg("MoreMsg"):fg(theme.blue):bold()
+	hlg("Question"):fg(theme.purple):bold()
 
 	-- Diff
-	hl("DiffAdd"):fg(theme.green):bold()
-	hl("DiffChange"):fg(theme.yellow):bold()
-	hl("DiffDelete"):fg(theme.red):bold()
-	hl("DiffText"):fg(theme.fg):bold()
+	hlg("DiffAdd"):fg(theme.green):bold()
+	hlg("DiffChange"):fg(theme.yellow):bold()
+	hlg("DiffDelete"):fg(theme.red):bold()
+	hlg("DiffText"):fg(theme.fg):bold()
 
 	-- Git
-	hl("GitSignsAdd"):fg(theme.green)
-	hl("GitSignsChange"):fg(theme.yellow)
-	hl("GitSignsDelete"):fg(theme.red)
+	hlg("GitSignsAdd"):fg(theme.green)
+	hlg("GitSignsChange"):fg(theme.yellow)
+	hlg("GitSignsDelete"):fg(theme.red)
 end
 
 -- Function to load the colorscheme

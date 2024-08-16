@@ -7,16 +7,11 @@ function M.load()
 	end
 	vim.o.termguicolors = true
 	vim.g.colors_name = "simpleclaudia"
-
 	-- Load the user's preferred background setting, defaulting to "dark"
 	vim.o.background = vim.g.simpleclaudia_background or "dark"
 
 	local simpleclaudia = require("simpleclaudia")
-	if type(simpleclaudia.load) == "function" then
-		simpleclaudia.load()
-	else
-		error("simpleclaudia.load is not a function. simpleclaudia: " .. vim.inspect(simpleclaudia))
-	end
+	simpleclaudia.load()
 end
 
 function M.setup()

@@ -170,7 +170,7 @@ function Highlight:as(base_group)
 end
 
 -- Function to create a new highlight definition
-function M.hl(group)
+function M.hlg(group)
 	return Highlight.new(group)
 end
 
