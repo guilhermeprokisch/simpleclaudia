@@ -1,16 +1,73 @@
 local M = {}
-
--- Function to create an HSL color object
-function M.hsl(h, s, l)
-	return { type = "hsl", h = h, s = s, l = l }
+-- Function to convert hex to RGB
+local function hex_to_rgb(hex)
+	hex = hex:lower():gsub("#", "")
+	return tonumber("0x" .. hex:sub(1, 2)), tonumber("0x" .. hex:sub(3, 4)), tonumber("0x" .. hex:sub(5, 6))
 end
 
--- Function to convert HSL to RGB
-local function hsl_to_rgb(h, s, l)
-	h = h / 360
-	s = s / 100
-	l = l / 100
+-- Function to convert RGB to HSL
+local function rgb_to_hsl(r, g, b)
+	r, g, b = r / 255, g / 255, b / 255
+	local max, min = math.max(r, g, b), math.min(r, g, b)
+	local h, s, l
 
+	l = (max + min) / 2
+
+	if max == min then
+		h, s = 0, 0 -- achromatic
+	else
+		local d = max - min
+		s = l > 0.5 and d / (2 - max - min) or d / (max + min)
+		if max == r then
+			h = (g - b) / d + (g < b and 6 or 0)
+		elseif max == g then
+			h = (b - r) / d + 2
+		else
+			h = (r - g) / d + 4
+		end
+		h = h / 6
+	end
+
+	return h * 360, s * 100, l * 100
+end
+
+-- HSL color object
+local HSL = {}
+HSL.__index = HSL
+
+function HSL:new(h, s, l)
+	return setmetatable({ h = h, s = s, l = l }, self)
+end
+
+function HSL:darker(amount)
+	return HSL:new(self.h, self.s, math.max(0, self.l - amount))
+end
+
+function HSL:lighter(amount)
+	return HSL:new(self.h, self.s, math.min(100, self.l + amount))
+end
+
+function HSL:saturate(amount)
+	return HSL:new(self.h, math.min(100, self.s + amount), self.l)
+end
+
+function HSL:desaturate(amount)
+	return HSL:new(self.h, math.max(0, self.s - amount), self.l)
+end
+
+function HSL:rotate(angle)
+	return HSL:new((self.h + angle) % 360, self.s, self.l)
+end
+
+function HSL:mix(other, weight)
+	weight = weight or 0.5
+	local h = (self.h * (1 - weight) + other.h * weight) % 360
+	local s = self.s * (1 - weight) + other.s * weight
+	local l = self.l * (1 - weight) + other.l * weight
+	return HSL:new(h, s, l)
+end
+
+function HSL:toHex()
 	local function hue_to_rgb(p, q, t)
 		if t < 0 then
 			t = t + 1
@@ -30,7 +87,9 @@ local function hsl_to_rgb(h, s, l)
 		return p
 	end
 
+	local h, s, l = self.h / 360, self.s / 100, self.l / 100
 	local r, g, b
+
 	if s == 0 then
 		r, g, b = l, l, l
 	else
@@ -41,33 +100,17 @@ local function hsl_to_rgb(h, s, l)
 		b = hue_to_rgb(p, q, h - 1 / 3)
 	end
 
-	return math.floor(r * 255 + 0.5), math.floor(g * 255 + 0.5), math.floor(b * 255 + 0.5)
+	return string.format("#%02x%02x%02x", r * 255, g * 255, b * 255)
 end
 
--- Function to convert RGB to hex
-local function rgb_to_hex(r, g, b)
-	return string.format("#%02x%02x%02x", r, g, b)
-end
-
--- Function to modify HSL lightness
-local function modify_lightness(color, amount)
-	if type(color) == "table" and color.type == "hsl" then
-		local new_l = math.max(0, math.min(100, color.l + amount))
-		return M.hsl(color.h, color.s, new_l)
+-- Function to create an HSL color object
+function M.hsl(h, s, l)
+	if type(h) == "string" and h:sub(1, 1) == "#" then
+		-- If a hex code is provided, convert it to HSL
+		local r, g, b = hex_to_rgb(h)
+		h, s, l = rgb_to_hsl(r, g, b)
 	end
-	return color
-end
-
--- Function to process a color value
-local function process_color(color, modifier)
-	if type(color) == "table" and color.type == "hsl" then
-		if modifier then
-			color = modify_lightness(color, modifier)
-		end
-		local r, g, b = hsl_to_rgb(color.h, color.s, color.l)
-		return rgb_to_hex(r, g, b)
-	end
-	return color
+	return HSL:new(h, s, l)
 end
 
 -- Highlight definition object
@@ -83,28 +126,20 @@ local function apply_highlight(self)
 	if self.attrs.base then
 		local base_attrs = vim.api.nvim_get_hl(0, { name = self.attrs.base })
 		for k, v in pairs(self.attrs) do
-			if k ~= "fg_modifier" and k ~= "bg_modifier" then
-				base_attrs[k] = v
-			end
+			base_attrs[k] = v
 		end
 		self.attrs = base_attrs
 	end
 
-	-- Process colors with modifiers
-	if self.attrs.fg then
-		self.attrs.fg = process_color(self.attrs.fg, self.attrs.fg_modifier)
-	end
-	if self.attrs.bg then
-		self.attrs.bg = process_color(self.attrs.bg, self.attrs.bg_modifier)
-	end
-	if self.attrs.sp then
-		self.attrs.sp = process_color(self.attrs.sp)
+	-- Convert HSL colors to hex
+	for attr, value in pairs(self.attrs) do
+		if type(value) == "table" and value.toHex then
+			self.attrs[attr] = value:toHex()
+		end
 	end
 
-	-- Remove the base key and modifiers
+	-- Remove the base key
 	self.attrs.base = nil
-	self.attrs.fg_modifier = nil
-	self.attrs.bg_modifier = nil
 
 	-- Set the highlight
 	vim.api.nvim_set_hl(0, self.group, self.attrs)
@@ -130,30 +165,6 @@ create_method("strikethrough", true)
 
 function Highlight:as(base_group)
 	self.attrs.base = base_group
-	apply_highlight(self)
-	return self
-end
-
-function Highlight:darker(amount, attribute)
-	amount = amount or 10
-	if attribute == "fg" or attribute == nil then
-		self.attrs.fg_modifier = -amount
-	end
-	if attribute == "bg" or attribute == nil then
-		self.attrs.bg_modifier = -amount
-	end
-	apply_highlight(self)
-	return self
-end
-
-function Highlight:lighter(amount, attribute)
-	amount = amount or 10
-	if attribute == "fg" or attribute == nil then
-		self.attrs.fg_modifier = amount
-	end
-	if attribute == "bg" or attribute == nil then
-		self.attrs.bg_modifier = amount
-	end
 	apply_highlight(self)
 	return self
 end
