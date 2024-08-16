@@ -1,0 +1,1 @@
+require("simpleclaudia.colors").load()
