@@ -49,9 +49,21 @@ local function rgb_to_hex(r, g, b)
 	return string.format("#%02x%02x%02x", r, g, b)
 end
 
--- Function to process a color value
-local function process_color(color)
+-- Function to modify HSL lightness
+local function modify_lightness(color, amount)
 	if type(color) == "table" and color.type == "hsl" then
+		local new_l = math.max(0, math.min(100, color.l + amount))
+		return M.hsl(color.h, color.s, new_l)
+	end
+	return color
+end
+
+-- Function to process a color value
+local function process_color(color, modifier)
+	if type(color) == "table" and color.type == "hsl" then
+		if modifier then
+			color = modify_lightness(color, modifier)
+		end
 		local r, g, b = hsl_to_rgb(color.h, color.s, color.l)
 		return rgb_to_hex(r, g, b)
 	end
@@ -71,24 +83,28 @@ local function apply_highlight(self)
 	if self.attrs.base then
 		local base_attrs = vim.api.nvim_get_hl(0, { name = self.attrs.base })
 		for k, v in pairs(self.attrs) do
-			base_attrs[k] = v
+			if k ~= "fg_modifier" and k ~= "bg_modifier" then
+				base_attrs[k] = v
+			end
 		end
 		self.attrs = base_attrs
 	end
 
-	-- Process colors
+	-- Process colors with modifiers
 	if self.attrs.fg then
-		self.attrs.fg = process_color(self.attrs.fg)
+		self.attrs.fg = process_color(self.attrs.fg, self.attrs.fg_modifier)
 	end
 	if self.attrs.bg then
-		self.attrs.bg = process_color(self.attrs.bg)
+		self.attrs.bg = process_color(self.attrs.bg, self.attrs.bg_modifier)
 	end
 	if self.attrs.sp then
 		self.attrs.sp = process_color(self.attrs.sp)
 	end
 
-	-- Remove the base key
+	-- Remove the base key and modifiers
 	self.attrs.base = nil
+	self.attrs.fg_modifier = nil
+	self.attrs.bg_modifier = nil
 
 	-- Set the highlight
 	vim.api.nvim_set_hl(0, self.group, self.attrs)
@@ -112,8 +128,32 @@ create_method("underline", true)
 create_method("undercurl", true)
 create_method("strikethrough", true)
 
-function Highlight:from(base_group)
+function Highlight:as(base_group)
 	self.attrs.base = base_group
+	apply_highlight(self)
+	return self
+end
+
+function Highlight:darker(amount, attribute)
+	amount = amount or 10
+	if attribute == "fg" or attribute == nil then
+		self.attrs.fg_modifier = -amount
+	end
+	if attribute == "bg" or attribute == nil then
+		self.attrs.bg_modifier = -amount
+	end
+	apply_highlight(self)
+	return self
+end
+
+function Highlight:lighter(amount, attribute)
+	amount = amount or 10
+	if attribute == "fg" or attribute == nil then
+		self.attrs.fg_modifier = amount
+	end
+	if attribute == "bg" or attribute == nil then
+		self.attrs.bg_modifier = amount
+	end
 	apply_highlight(self)
 	return self
 end

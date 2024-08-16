@@ -6,7 +6,7 @@ local M = {}
 -- Define your color palettes
 local colors = {
 	dark = {
-		bg = hsl(220, 13, 1), -- Dark background
+		bg = hsl(220, 13, 10), -- Dark background
 		bg_alt = hsl(220, 13, 22), -- Slightly lighter background
 		fg = hsl(220, 14, 71), -- Light foreground
 		fg_alt = hsl(220, 14, 60), -- Slightly darker foreground
@@ -18,7 +18,7 @@ local colors = {
 		cyan = hsl(187, 47, 55), -- Muted cyan
 	},
 	light = {
-		bg = hsl(220, 14, 90), -- Light background
+		bg = hsl(220, 14, 100), -- Light background
 		bg_alt = hsl(220, 14, 85), -- Slightly darker background
 		fg = hsl(220, 13, 25), -- Dark foreground
 		fg_alt = hsl(220, 13, 35), -- Slightly lighter foreground
@@ -36,49 +36,49 @@ local function setup_colors()
 	local theme = vim.o.background == "dark" and colors.dark or colors.light
 
 	-- Basic editor colors
-	hl("Normal"):fg(theme.fg):bg(theme.bg)
-	hl("NormalFloat"):from("Normal")
+	hl("NormalFloat"):fg(theme.fg):bg(theme.bg)
+	hl("Normal"):as("NormalFloat"):darker(50, "bg"):lighter(50, "fg")
 	hl("Comment"):fg(theme.green):italic()
 	hl("Cursor"):fg(theme.bg):bg(theme.fg)
 	hl("CursorLine"):bg(theme.bg_alt)
-	hl("CursorColumn"):from("CursorLine")
+	hl("CursorColumn"):as("CursorLine")
 
 	-- Syntax highlighting
 	hl("Constant"):fg(theme.cyan)
 	hl("String"):fg(theme.green)
-	hl("Character"):from("String")
+	hl("Character"):as("String")
 	hl("Number"):fg(theme.purple)
-	hl("Boolean"):from("Number")
-	hl("Float"):from("Number")
+	hl("Boolean"):as("Number")
+	hl("Float"):as("Number")
 
 	hl("Identifier"):fg(theme.blue)
 	hl("Function"):fg(theme.yellow)
 
 	hl("Statement"):fg(theme.purple):bold()
-	hl("Conditional"):from("Statement")
-	hl("Repeat"):from("Statement")
-	hl("Label"):from("Statement")
+	hl("Conditional"):as("Statement")
+	hl("Repeat"):as("Statement")
+	hl("Label"):as("Statement")
 	hl("Operator"):fg(theme.cyan)
-	hl("Keyword"):from("Statement")
-	hl("Exception"):from("Statement")
+	hl("Keyword"):as("Statement")
+	hl("Exception"):as("Statement")
 
 	hl("PreProc"):fg(theme.cyan)
-	hl("Include"):from("PreProc")
-	hl("Define"):from("PreProc")
-	hl("Macro"):from("PreProc")
-	hl("PreCondit"):from("PreProc")
+	hl("Include"):as("PreProc")
+	hl("Define"):as("PreProc")
+	hl("Macro"):as("PreProc")
+	hl("PreCondit"):as("PreProc")
 
 	hl("Type"):fg(theme.yellow)
-	hl("StorageClass"):from("Type")
-	hl("Structure"):from("Type")
-	hl("Typedef"):from("Type")
+	hl("StorageClass"):as("Type")
+	hl("Structure"):as("Type")
+	hl("Typedef"):as("Type")
 
 	hl("Special"):fg(theme.red)
-	hl("SpecialChar"):from("Special")
-	hl("Tag"):from("Special")
-	hl("Delimiter"):from("Special")
-	hl("SpecialComment"):from("Special")
-	hl("Debug"):from("Special")
+	hl("SpecialChar"):as("Special")
+	hl("Tag"):as("Special")
+	hl("Delimiter"):as("Special")
+	hl("SpecialComment"):as("Special")
+	hl("Debug"):as("Special")
 
 	hl("Underlined"):underline()
 	hl("Ignore"):fg(theme.fg_alt)
@@ -88,12 +88,12 @@ local function setup_colors()
 	-- Editor UI
 	hl("StatusLine"):fg(theme.fg):bg(theme.bg_alt)
 	hl("StatusLineNC"):fg(theme.fg_alt):bg(theme.bg)
-	hl("TabLine"):from("StatusLineNC")
-	hl("TabLineFill"):from("StatusLine")
+	hl("TabLine"):as("StatusLineNC")
+	hl("TabLineFill"):as("StatusLine")
 	hl("TabLineSel"):fg(theme.bg):bg(theme.purple)
 
 	hl("Search"):fg(theme.bg):bg(theme.yellow)
-	hl("IncSearch"):from("Search")
+	hl("IncSearch"):as("Search")
 
 	hl("Pmenu"):fg(theme.fg):bg(theme.bg_alt)
 	hl("PmenuSel"):fg(theme.bg):bg(theme.purple)
@@ -101,7 +101,7 @@ local function setup_colors()
 	hl("PmenuThumb"):bg(theme.fg)
 
 	hl("Folded"):fg(theme.fg_alt):bg(theme.bg_alt)
-	hl("FoldColumn"):from("Folded")
+	hl("FoldColumn"):as("Folded")
 
 	hl("SignColumn"):fg(theme.fg):bg(theme.bg)
 	hl("LineNr"):fg(theme.fg_alt)
@@ -110,10 +110,10 @@ local function setup_colors()
 	hl("MatchParen"):fg(theme.yellow):bold():underline()
 
 	hl("NonText"):fg(theme.fg_alt)
-	hl("SpecialKey"):from("NonText")
+	hl("SpecialKey"):as("NonText")
 
 	hl("Visual"):bg(theme.bg_alt)
-	hl("VisualNOS"):from("Visual")
+	hl("VisualNOS"):as("Visual")
 
 	hl("Directory"):fg(theme.blue)
 	hl("Title"):fg(theme.purple):bold()
