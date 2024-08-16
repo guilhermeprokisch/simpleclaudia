@@ -4,6 +4,14 @@ SimpleClaudia is a minimalist and elegant color scheme for Neovim, designed to p
 
 **Note: SimpleClaudia is currently in alpha. Expect frequent updates and potential breaking changes.**
 
+## Theme Preview
+
+### Dark Theme
+<img width="1491" alt="image" src="https://github.com/user-attachments/assets/937d20b6-cfe4-4f2b-ac76-4e36af7c4339">
+
+### Light Theme
+<img width="1491" alt="image" src="https://github.com/user-attachments/assets/8be3d8db-2bc8-4147-abe0-737b9a0a8c12">
+
 ## Features
 
 - Light and dark themes
@@ -75,3 +83,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Acknowledgements
 
 Special thanks to the Neovim community for their invaluable resources and inspiration.
+
