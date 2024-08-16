@@ -1,5 +1,5 @@
 local utils = require("simpleclaudia.utils")
-local hlg, hsl = utils.hlg, utils.hsl
+local hl, hsl = utils.hlg, utils.hsl
 
 local M = {}
 
@@ -7,20 +7,21 @@ local M = {}
 local function create_colors()
 	local c = {
 		dark = {
-			bg = hsl("#F2F0EA"):rotate(180), -- Dark background
-			bg_alt = hsl(220, 13, 22), -- Slightly lighter background
-			fg = hsl(220, 14, 71), -- Light foreground
-			fg_alt = hsl(220, 14, 60), -- Slightly darker foreground
-			red = hsl(355, 65, 65), -- Soft red
-			green = hsl("#6D675D"), -- Muted green
-			yellow = hsl(40, 70, 68), -- Warm yellow
-			blue = hsl(207, 82, 66), -- Bright blue
-			purple = hsl(286, 60, 67), -- Soft purple
-			cyan = hsl(187, 47, 55), -- Muted cyan
-			c1 = hsl("#737165"),
+			bg = hsl("#393937"),
+			bg_alt = hsl("#393937"):lighter(3),
+			fg = hsl("#CFCFCA"),
+			red = hsl("#8D4144"),
+			green = hsl("#8CA375"),
+			yellow = hsl("#D7785D"),
+			blue = hsl("#3F7DD7"),
+			purple = hsl("#9888EE"),
+			cyan = hsl("#CFCFCA"),
+			c1 = hsl("#CFCFCA"):darker(30),
+			c2 = hsl("#A9A69C"):darker(10),
 		},
 		light = {
-			bg = hsl("#F2F0EA"),
+			bg = hsl("#eeede6"),
+			bg_alt = hsl("#EBE8E1"),
 			fg = hsl("#7B6C51"),
 			red = hsl("#8D4144"),
 			green = hsl("#8CA375"),
@@ -28,13 +29,12 @@ local function create_colors()
 			blue = hsl("#3F7DD7"),
 			purple = hsl("#41386E"),
 			cyan = hsl("#6d675d"),
-			c1 = hsl("#737165"),
+			c1 = hsl("#737165"):lighter(20),
 			c2 = hsl("#A9A69C"),
 		},
 	}
 
 	-- Define additional keys based on existing ones
-	c.light.bg_alt = c.light.bg:desaturate(30)
 	c.light.fg_alt = c.light.fg:lighter(2)
 	return c
 end
@@ -49,174 +49,178 @@ local function setup_colors()
 	-- hl("NormalFloat"):as("Normal"):darker(10, "bg") -- FIX: Modifiers no working
 
 	-- Basic editor colors
-	hlg("Normal"):bg(theme.bg):fg(theme.fg)
-	hlg("NormalFloat"):as("Normal")
+	hl("Normal"):bg(theme.bg):fg(theme.fg)
+	hl("NormalFloat"):as("Normal")
 	-- hlg("Comment"):fg(theme.green:mix(theme.bg):desaturate(10):darker(10)):italic()
-	hlg("Comment"):fg(theme.c1:lighter(20)):italic()
-	hlg("Cursor"):fg(theme.bg):bg(theme.fg)
-	hlg("CursorLine"):bg(theme.bg_alt)
-	hlg("CursorColumn"):as("CursorLine")
+	hl("Comment"):fg(theme.c1):italic()
+	hl("Cursor"):fg(theme.bg):bg(theme.fg)
+	hl("CursorLine"):bg(theme.bg_alt)
+	hl("CursorColumn"):as("CursorLine")
 
 	-- Syntax highlighting
-	hlg("Constant"):fg(theme.cyan):italic()
-	hlg("String"):fg(theme.green)
-	hlg("Character"):as("String")
-	hlg("Number"):fg(theme.purple):italic()
-	hlg("Boolean"):as("Number")
-	hlg("Float"):as("Number")
+	hl("Constant"):fg(theme.cyan):italic()
+	hl("String"):fg(theme.green)
+	hl("Character"):as("String")
+	hl("Number"):fg(theme.purple):italic()
+	hl("Boolean"):as("Number")
+	hl("Float"):as("Number")
 
-	hlg("Identifier"):fg(theme.blue)
-	hlg("Function"):fg(theme.yellow)
+	hl("Identifier"):fg(theme.blue)
+	hl("Function"):fg(theme.yellow)
 
-	hlg("Statement"):fg(theme.blue):bold()
-	hlg("Conditional"):as("Statement")
-	hlg("Repeat"):as("Statement")
-	hlg("Label"):as("Statement")
-	hlg("Operator"):fg(theme.cyan)
-	hlg("Keyword"):fg(theme.blue)
-	hlg("Exception"):as("Statement")
+	hl("Statement"):fg(theme.blue):bold()
+	hl("Conditional"):as("Statement")
+	hl("Repeat"):as("Statement")
+	hl("Label"):as("Statement")
+	hl("Operator"):fg(theme.cyan)
+	hl("Keyword"):fg(theme.blue)
+	hl("Exception"):as("Statement")
 
-	hlg("PreProc"):fg(theme.cyan)
-	hlg("Include"):as("PreProc")
-	hlg("Define"):as("PreProc")
-	hlg("Macro"):as("PreProc")
-	hlg("PreCondit"):as("PreProc")
+	hl("PreProc"):fg(theme.cyan)
+	hl("Include"):as("PreProc")
+	hl("Define"):as("PreProc")
+	hl("Macro"):as("PreProc")
+	hl("PreCondit"):as("PreProc")
 
-	hlg("Type"):fg(theme.yellow)
-	hlg("StorageClass"):as("Type")
-	hlg("Structure"):as("Type")
-	hlg("Typedef"):as("Type")
+	hl("Type"):fg(theme.yellow)
+	hl("StorageClass"):as("Type")
+	hl("Structure"):as("Type")
+	hl("Typedef"):as("Type")
 
-	hlg("Special"):fg(theme.green)
-	hlg("SpecialChar"):as("Special")
-	hlg("Tag"):as("Special")
-	hlg("Delimiter"):as("Special")
-	hlg("SpecialComment"):as("Special")
-	hlg("Debug"):as("Special")
+	hl("Special"):fg(theme.c2)
+	hl("SpecialChar"):as("Special")
+	hl("Tag"):as("Special")
+	hl("Delimiter"):as("Special")
+	hl("SpecialComment"):as("Special")
+	hl("Debug"):as("Special")
 
-	hlg("Underlined"):undercurl()
-	hlg("Ignore"):fg(theme.fg_alt)
-	hlg("Error"):fg(theme.red):bold()
-	hlg("Todo"):fg(theme.purple):bold()
+	hl("Underlined"):undercurl()
+	hl("Ignore"):fg(theme.fg_alt)
+	hl("Error"):fg(theme.red):bold()
+	hl("Todo"):fg(theme.purple):bold()
 
 	-- Editor UI
-	hlg("StatusLine"):fg(theme.fg):bg(theme.bg_alt)
-	hlg("StatusLineNC"):fg(theme.fg_alt):bg(theme.bg)
-	hlg("TabLine"):as("StatusLineNC")
-	hlg("TabLineFill"):as("StatusLine")
-	hlg("TabLineSel"):fg(theme.bg):bg(theme.purple)
+	hl("StatusLine"):fg(theme.fg):bg(theme.bg_alt)
+	hl("StatusLineNC"):fg(theme.fg_alt):bg(theme.bg)
+	hl("TabLine"):as("StatusLineNC")
+	hl("TabLineFill"):as("StatusLine")
+	hl("TabLineSel"):fg(theme.bg):bg(theme.purple)
 
-	hlg("Search"):fg(theme.bg):bg(theme.yellow)
-	hlg("IncSearch"):as("Search")
+	hl("Search"):fg(theme.bg):bg(theme.yellow)
+	hl("IncSearch"):as("Search")
 
-	hlg("Pmenu"):fg(theme.fg):bg(theme.bg_alt)
-	hlg("PmenuSel"):fg(theme.bg):bg(theme.purple)
-	hlg("PmenuSbar"):bg(theme.bg_alt)
-	hlg("PmenuThumb"):bg(theme.fg)
+	hl("Pmenu"):fg(theme.fg):bg(theme.bg_alt)
+	hl("PmenuSel"):fg(theme.bg):bg(theme.purple)
+	hl("PmenuSbar"):bg(theme.bg_alt)
+	hl("PmenuThumb"):bg(theme.fg)
 
-	hlg("Folded"):fg(theme.fg_alt):bg(theme.bg_alt)
-	hlg("FoldColumn"):as("Folded")
+	hl("Folded"):fg(theme.fg_alt):bg(theme.bg_alt)
+	hl("FoldColumn"):as("Folded")
 
-	hlg("SignColumn"):fg(theme.fg):bg(theme.bg)
-	hlg("LineNr"):fg(theme.c2)
-	hlg("CursorLineNr"):fg(theme.yellow):bold()
+	hl("SignColumn"):fg(theme.fg):bg(theme.bg)
+	hl("LineNr"):fg(theme.c2)
+	hl("CursorLineNr"):fg(theme.yellow):bold()
 
-	hlg("MatchParen"):fg(theme.yellow):bold():underline()
+	hl("MatchParen"):fg(theme.yellow):bold():underline()
 
-	hlg("NonText"):fg(theme.fg_alt)
-	hlg("SpecialKey"):as("NonText")
+	hl("NonText"):fg(theme.fg_alt)
+	hl("SpecialKey"):as("NonText")
 
-	hlg("Visual"):bg(theme.bg_alt)
-	hlg("VisualNOS"):as("Visual")
+	hl("Visual"):bg(theme.bg_alt)
+	hl("VisualNOS"):as("Visual")
 
-	hlg("Directory"):fg(theme.blue)
-	hlg("Title"):fg(theme.purple):bold()
+	hl("Directory"):fg(theme.blue)
+	hl("Title"):fg(theme.purple):bold()
 
 	-- Diagnostic
-	hlg("ErrorMsg"):fg(theme.red):italic()
-	hlg("WarningMsg"):fg(theme.yellow):bold()
-	hlg("MoreMsg"):fg(theme.blue):bold()
-	hlg("Question"):fg(theme.purple):bold()
+	hl("ErrorMsg"):fg(theme.red):italic()
+	hl("WarningMsg"):fg(theme.yellow):bold()
+	hl("MoreMsg"):fg(theme.blue):bold()
+	hl("Question"):fg(theme.purple):bold()
 
 	-- Diff
-	hlg("DiffAdd"):fg(theme.green):bold()
-	hlg("DiffChange"):fg(theme.yellow):bold()
-	hlg("DiffDelete"):fg(theme.red):bold()
-	hlg("DiffText"):fg(theme.fg):bold()
+	hl("DiffAdd"):fg(theme.green):bold()
+	hl("DiffChange"):fg(theme.yellow):bold()
+	hl("DiffDelete"):fg(theme.red):bold()
+	hl("DiffText"):fg(theme.fg):bold()
 
 	-- Git
-	hlg("GitSignsAdd"):fg(theme.green)
-	hlg("GitSignsChange"):fg(theme.yellow)
-	hlg("GitSignsDelete"):fg(theme.red)
+	hl("GitSignsAdd"):fg(theme.green)
+	hl("GitSignsChange"):fg(theme.yellow)
+	hl("GitSignsDelete"):fg(theme.red)
 
 	--TreeSitter
 
 	-- Additional highlight groups
-	hlg("NvimInternalError"):fg(theme.red):bold()
-	hlg("NvimInvalidSpacing"):bg(theme.red:lighter(20))
-	hlg("NvimInvalidIndent"):bg(theme.yellow:lighter(20))
-	hlg("NvimInvalidTabStop"):bg(theme.purple:lighter(20))
+	hl("NvimInternalError"):fg(theme.red):bold()
+	hl("NvimInvalidSpacing"):bg(theme.red:lighter(20))
+	hl("NvimInvalidIndent"):bg(theme.yellow:lighter(20))
+	hl("NvimInvalidTabStop"):bg(theme.purple:lighter(20))
 
 	-- Spelling
-	hlg("SpellBad"):fg(theme.red):underline()
-	hlg("SpellCap"):fg(theme.yellow):underline()
-	hlg("SpellRare"):fg(theme.purple):underline()
-	hlg("SpellLocal"):fg(theme.cyan):underline()
+	hl("SpellBad"):fg(theme.red):underline()
+	hl("SpellCap"):fg(theme.yellow):underline()
+	hl("SpellRare"):fg(theme.purple):underline()
+	hl("SpellLocal"):fg(theme.cyan):underline()
 
 	-- Treesitter
-	hlg("@string"):fg(theme.green)
-	hlg("@function"):fg(theme.yellow)
-	hlg("@function.call"):fg(theme.yellow)
-	hlg("@method"):fg(theme.blue)
-	hlg("@constructor"):fg(theme.purple)
-	hlg("@parameter"):fg(theme.cyan):italic()
-	hlg("@type"):fg(theme.yellow)
-	hlg("@property"):fg(theme.cyan)
-	hlg("@variable"):fg(theme.fg):italic()
+	hl("@string"):fg(theme.green)
+	hl("@function"):fg(theme.yellow)
+	hl("@function.call"):fg(theme.yellow)
+	hl("@method"):fg(theme.blue)
+	hl("@constructor"):fg(theme.purple)
+	hl("@parameter"):fg(theme.cyan):italic()
+	hl("@type"):fg(theme.yellow)
+	hl("@property"):fg(theme.cyan)
+	hl("@variable"):fg(theme.fg):italic()
 
 	-- Diagnostic
-	hlg("DiagnosticError"):fg(theme.red:lighter(10)):italic()
-	hlg("DiagnosticWarn"):fg(theme.yellow:saturate(10)):italic()
-	hlg("DiagnosticInfo"):fg(theme.blue):italic()
-	hlg("DiagnosticHint"):fg(theme.cyan):italic()
-	hlg("DiagnosticUnderlineError"):undercurl():sp(theme.red)
-	hlg("DiagnosticUnderlineWarn"):undercurl():sp(theme.yellow)
-	hlg("DiagnosticUnderlineInfo"):undercurl():sp(theme.blue)
-	hlg("DiagnosticUnderlineHint"):undercurl():sp(theme.cyan)
+	hl("DiagnosticError"):fg(theme.red:lighter(10)):italic()
+	hl("DiagnosticWarn"):fg(theme.yellow:saturate(10)):italic()
+	hl("DiagnosticInfo"):fg(theme.blue):italic()
+	hl("DiagnosticHint"):fg(theme.cyan):italic()
+	hl("DiagnosticUnderlineError"):undercurl():sp(theme.red)
+	hl("DiagnosticUnderlineWarn"):undercurl():sp(theme.yellow)
+	hl("DiagnosticUnderlineInfo"):undercurl():sp(theme.blue)
+	hl("DiagnosticUnderlineHint"):undercurl():sp(theme.cyan)
 
 	-- Neovim LSP
-	hlg("LspReferenceText"):bg(theme.bg_alt)
-	hlg("LspReferenceRead"):bg(theme.bg_alt)
-	hlg("LspReferenceWrite"):bg(theme.bg_alt)
-	hlg("LspSignatureActiveParameter"):fg(theme.yellow):bold()
+	hl("LspReferenceText"):bg(theme.bg_alt)
+	hl("LspReferenceRead"):bg(theme.bg_alt)
+	hl("LspReferenceWrite"):bg(theme.bg_alt)
+	hl("LspSignatureActiveParameter"):fg(theme.yellow):bold()
 
 	-- Lualine
-	hlg("LualineNormal"):fg(theme.fg):bg(theme.bg_alt)
-	hlg("LualineInsert"):fg(theme.bg):bg(theme.green)
-	hlg("LualineVisual"):fg(theme.bg):bg(theme.purple)
-	hlg("LualineReplace"):fg(theme.bg):bg(theme.red)
-	hlg("LualineCommand"):fg(theme.bg):bg(theme.yellow)
+	hl("LualineNormal"):fg(theme.fg):bg(theme.bg_alt)
+	hl("LualineInsert"):fg(theme.bg):bg(theme.green)
+	hl("LualineVisual"):fg(theme.bg):bg(theme.purple)
+	hl("LualineReplace"):fg(theme.bg):bg(theme.red)
+	hl("LualineCommand"):fg(theme.bg):bg(theme.yellow)
 
 	-- Nvim-Tree
-	hlg("NvimTreeNormal"):fg(theme.fg):bg(theme.bg)
-	hlg("NvimTreeFolderName"):fg(theme.blue)
-	hlg("NvimTreeFolderIcon"):fg(theme.yellow)
-	hlg("NvimTreeOpenedFolderName"):fg(theme.blue):bold()
-	hlg("NvimTreeEmptyFolderName"):fg(theme.fg_alt)
-	hlg("NvimTreeIndentMarker"):fg(theme.fg_alt)
-	hlg("NvimTreeSymlink"):fg(theme.cyan)
-	hlg("NvimTreeStatuslineNc"):fg(theme.fg_alt):bg(theme.bg)
+	-- hl("NvimTreeNormal"):fg(theme.fg):bg(theme.bg)
+	-- hl("NvimTreeFolderName"):fg(theme.blue)
+	-- hl("NvimTreeFolderIcon"):fg(theme.yellow)
+	-- hl("NvimTreeOpenedFolderName"):fg(theme.blue):bold()
+	-- hl("NvimTreeEmptyFolderName"):fg(theme.fg_alt)
+	-- hl("NvimTreeIndentMarker"):fg(theme.blue)
+	-- hl("NvimTreeSymlink"):fg(theme.cyan)
+	-- hl("NvimTreeStatuslineNc"):fg(theme.fg_alt):bg(theme.bg)
 
 	-- Spelling with wavy underlines
-	hlg("SpellBad"):undercurl():sp(theme.red)
-	hlg("SpellCap"):undercurl():sp(theme.yellow)
-	hlg("SpellRare"):undercurl():sp(theme.purple)
-	hlg("SpellLocal"):undercurl():sp(theme.cyan)
+	-- hl("SpellBad"):undercurl():sp(theme.red)
+	-- hl("SpellCap"):undercurl():sp(theme.yellow)
+	-- hl("SpellRare"):undercurl():sp(theme.purple)
+	-- hl("SpellLocal"):undercurl():sp(theme.cyan)
 
 	-- NvimInvalid* groups with wavy underlines
-	hlg("NvimInvalidSpacing"):undercurl():sp(theme.red)
-	hlg("NvimInvalidIndent"):undercurl():sp(theme.yellow)
-	hlg("NvimInvalidTabStop"):undercurl():sp(theme.purple)
+	-- hl("NvimInvalidSpacing"):undercurl():sp(theme.red)
+	-- hl("NvimInvalidIndent"):undercurl():sp(theme.yellow)
+	-- hl("NvimInvalidTabStop"):undercurl():sp(theme.purple)
+
+	hl("@ibl.indent.char.1"):fg(theme.c1:darker(20))
+	hl("@ibl.whitespace.char.1"):fg(theme.c1)
+	hl("@ibl.scope.char.1"):fg(theme.c1)
 end
 
 -- Function to load the colorscheme
