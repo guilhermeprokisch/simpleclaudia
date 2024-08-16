@@ -9,15 +9,16 @@ local function create_colors()
 		dark = {
 			bg = hsl("#393937"),
 			bg_alt = hsl("#393937"):lighter(3),
-			fg = hsl("#CFCFCA"),
+			fg = hsl("#CFCFCA"):darker(10),
 			red = hsl("#8D4144"),
 			green = hsl("#8CA375"),
 			yellow = hsl("#D7785D"),
 			blue = hsl("#3F7DD7"),
 			purple = hsl("#9888EE"),
-			cyan = hsl("#CFCFCA"),
+			cyan = hsl("#CFCFCA"):darker(10),
 			c1 = hsl("#CFCFCA"):darker(30),
-			c2 = hsl("#A9A69C"):darker(10),
+			c2 = hsl("#A9A69C"):darker(20),
+			c3 = hsl("#A9A69C"):darker(35),
 		},
 		light = {
 			bg = hsl("#eeede6"),
@@ -31,11 +32,13 @@ local function create_colors()
 			cyan = hsl("#6d675d"),
 			c1 = hsl("#737165"):lighter(20),
 			c2 = hsl("#A9A69C"),
+			c3 = hsl("#A9A69C"):lighter(20),
 		},
 	}
 
 	-- Define additional keys based on existing ones
 	c.light.fg_alt = c.light.fg:lighter(2)
+	c.dark.fg_alt = c.light.fg:lighter(2)
 	return c
 end
 
@@ -51,7 +54,6 @@ local function setup_colors()
 	-- Basic editor colors
 	hl("Normal"):bg(theme.bg):fg(theme.fg)
 	hl("NormalFloat"):as("Normal")
-	-- hlg("Comment"):fg(theme.green:mix(theme.bg):desaturate(10):darker(10)):italic()
 	hl("Comment"):fg(theme.c1):italic()
 	hl("Cursor"):fg(theme.bg):bg(theme.fg)
 	hl("CursorLine"):bg(theme.bg_alt)
@@ -64,7 +66,6 @@ local function setup_colors()
 	hl("Number"):fg(theme.purple):italic()
 	hl("Boolean"):as("Number")
 	hl("Float"):as("Number")
-
 	hl("Identifier"):fg(theme.blue)
 	hl("Function"):fg(theme.yellow)
 
@@ -132,11 +133,11 @@ local function setup_colors()
 	hl("Directory"):fg(theme.blue)
 	hl("Title"):fg(theme.purple):bold()
 
-	-- Diagnostic
-	hl("ErrorMsg"):fg(theme.red):italic()
-	hl("WarningMsg"):fg(theme.yellow):bold()
-	hl("MoreMsg"):fg(theme.blue):bold()
-	hl("Question"):fg(theme.purple):bold()
+	-- -- Diagnostic
+	-- hl("ErrorMsg"):fg(theme.red):italic()
+	-- hl("WarningMsg"):fg(theme.yellow):bold()
+	-- hl("MoreMsg"):fg(theme.blue):bold()
+	-- hl("Question"):fg(theme.purple):bold()
 
 	-- Diff
 	hl("DiffAdd"):fg(theme.green):bold()
@@ -175,8 +176,8 @@ local function setup_colors()
 	hl("@variable"):fg(theme.fg):italic()
 
 	-- Diagnostic
-	hl("DiagnosticError"):fg(theme.red:lighter(10)):italic()
-	hl("DiagnosticWarn"):fg(theme.yellow:saturate(10)):italic()
+	hl("DiagnosticError"):fg(theme.red):italic()
+	hl("DiagnosticWarn"):fg(theme.yellow):italic()
 	hl("DiagnosticInfo"):fg(theme.blue):italic()
 	hl("DiagnosticHint"):fg(theme.cyan):italic()
 	hl("DiagnosticUnderlineError"):undercurl():sp(theme.red)
@@ -196,29 +197,7 @@ local function setup_colors()
 	hl("LualineVisual"):fg(theme.bg):bg(theme.purple)
 	hl("LualineReplace"):fg(theme.bg):bg(theme.red)
 	hl("LualineCommand"):fg(theme.bg):bg(theme.yellow)
-
-	-- Nvim-Tree
-	-- hl("NvimTreeNormal"):fg(theme.fg):bg(theme.bg)
-	-- hl("NvimTreeFolderName"):fg(theme.blue)
-	-- hl("NvimTreeFolderIcon"):fg(theme.yellow)
-	-- hl("NvimTreeOpenedFolderName"):fg(theme.blue):bold()
-	-- hl("NvimTreeEmptyFolderName"):fg(theme.fg_alt)
-	-- hl("NvimTreeIndentMarker"):fg(theme.blue)
-	-- hl("NvimTreeSymlink"):fg(theme.cyan)
-	-- hl("NvimTreeStatuslineNc"):fg(theme.fg_alt):bg(theme.bg)
-
-	-- Spelling with wavy underlines
-	-- hl("SpellBad"):undercurl():sp(theme.red)
-	-- hl("SpellCap"):undercurl():sp(theme.yellow)
-	-- hl("SpellRare"):undercurl():sp(theme.purple)
-	-- hl("SpellLocal"):undercurl():sp(theme.cyan)
-
-	-- NvimInvalid* groups with wavy underlines
-	-- hl("NvimInvalidSpacing"):undercurl():sp(theme.red)
-	-- hl("NvimInvalidIndent"):undercurl():sp(theme.yellow)
-	-- hl("NvimInvalidTabStop"):undercurl():sp(theme.purple)
-
-	hl("@ibl.indent.char.1"):fg(theme.c1:darker(20))
+	hl("@ibl.indent.char.1"):fg(theme.c3)
 	hl("@ibl.whitespace.char.1"):fg(theme.c1)
 	hl("@ibl.scope.char.1"):fg(theme.c1)
 end

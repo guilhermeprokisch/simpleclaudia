@@ -1,1 +1,1 @@
-require("simpleclaudia.colors").load()
+require("simpleclaudia.setup").load()
