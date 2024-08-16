@@ -3,42 +3,54 @@ local hl, hsl = utils.hl, utils.hsl
 
 local M = {}
 
--- Define your color palettes
-local colors = {
-	dark = {
-		bg = hsl("#6D675D"), -- Dark background
-		bg_alt = hsl(220, 13, 22), -- Slightly lighter background
-		fg = hsl(220, 14, 71), -- Light foreground
-		fg_alt = hsl(220, 14, 60), -- Slightly darker foreground
-		red = hsl(355, 65, 65), -- Soft red
-		green = hsl(95, 55, 55), -- Muted green
-		yellow = hsl(40, 70, 68), -- Warm yellow
-		blue = hsl(207, 82, 66), -- Bright blue
-		purple = hsl(286, 60, 67), -- Soft purple
-		cyan = hsl(187, 47, 55), -- Muted cyan
-	},
-	light = {
-		bg = hsl("#F3F1E9"), -- Light background
-		bg_alt = hsl(220, 14, 85), -- Slightly darker background
-		fg = hsl(220, 13, 25), -- Dark foreground
-		fg_alt = hsl(220, 13, 35), -- Slightly lighter foreground
-		red = hsl(355, 65, 50), -- Darker red for contrast
-		green = hsl(95, 55, 40), -- Darker green for contrast
-		yellow = hsl(40, 70, 50), -- Darker yellow for contrast
-		blue = hsl(207, 82, 50), -- Darker blue for contrast
-		purple = hsl(286, 60, 50), -- Darker purple for contrast
-		cyan = hsl(187, 47, 40), -- Darker cyan for contrast
-	},
-}
+-- Function to create the color palettes
+local function create_colors()
+	local colors = {
+		dark = {
+			bg = hsl("#6D675E"), -- Dark background
+			bg_alt = hsl(220, 13, 22), -- Slightly lighter background
+			fg = hsl(220, 14, 71), -- Light foreground
+			fg_alt = hsl(220, 14, 60), -- Slightly darker foreground
+			red = hsl(355, 65, 65), -- Soft red
+			green = hsl(95, 55, 55), -- Muted green
+			yellow = hsl(40, 70, 68), -- Warm yellow
+			blue = hsl(207, 82, 66), -- Bright blue
+			purple = hsl(286, 60, 67), -- Soft purple
+			cyan = hsl(187, 47, 55), -- Muted cyan
+		},
+		light = {
+			bg = hsl("#F3F1E9"), -- Light background
+			fg = hsl("#A9A69C"), -- Dark foreground
+			red = hsl("#B1856C"), -- Darker red for contrast
+			green = hsl("#8C9484"), -- Darker green for contrast
+			yellow = hsl("#D67654"), -- Darker yellow for contrast
+			blue = hsl("#556A7B"), -- Darker blue for contrast
+			purple = hsl("#7E788E"), -- Darker purple for contrast
+			cyan = hsl("#6d675d"), -- Darker cyan for contrast
+		},
+	}
+
+	-- Define additional keys based on existing ones
+	colors.light.bg_alt = colors.light.bg:desaturate(30)
+	colors.light.fg_alt = colors.light.fg:lighter(2)
+
+	-- colors.light.contrast = colors.light.bg:darken_by(10) -- Example of creating a derived value
+
+	return colors
+end
+
+-- Initialize the colors
+local colors = create_colors()
 
 -- Function to set up your colorscheme
 local function setup_colors()
 	local theme = vim.o.background == "dark" and colors.dark or colors.light
 
-	-- Basic editor colors
-	hl("NormalFloat"):bg(theme.bg):fg(theme.fg)
-	hl("Normal"):as("NormalFloat")
 	-- hl("NormalFloat"):as("Normal"):darker(10, "bg") -- FIX: Modifiers no working
+
+	-- Basic editor colors
+	hl("Normal"):bg(theme.bg):fg(theme.fg)
+	hl("NormalFloat"):as("Normal")
 	hl("Comment"):fg(theme.green):italic()
 	hl("Cursor"):fg(theme.bg):bg(theme.fg)
 	hl("CursorLine"):bg(theme.bg_alt)
